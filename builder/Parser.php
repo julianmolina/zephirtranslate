@@ -56,8 +56,9 @@ class Parser
                     if ($this->_createFolder(dirname($path))) {
                         $foldersCreated++;
                     }
-                    $filesCreated += $this->_copyFile($path);
-                    Check::isClass($this->_destinyFilePath);
+                    if (Check::isClass($path)){
+                        $filesCreated += $this->_copyFile($path);
+                    }
                     $notFound = true;
                 }
             }
@@ -82,6 +83,7 @@ class Parser
         $filename = pathinfo($path);
         $this->_destinyFilePath = $this->_destinyPath."/".$filename["filename"].".zep";
         if (copy($path, $this->_destinyFilePath)) {
+            chmod($this->_destinyFilePath, 0777);
             return 1;
         } else {
             echo TranslateException::warning("Error file copy", "This file cannot created: {$this->_destinyFilePath}");

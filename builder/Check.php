@@ -1,8 +1,14 @@
 <?php
 
+/**
+ * Translate tasks class from php to zephir code
+ *
+ * @author Julián Molina <b> jmolinac5116@ean.edu.co </b>
+ * @version 0.0.1
+ *
+ */
 class Check
 {
-
     /**
      *
      */
@@ -50,11 +56,13 @@ class Check
      */
     public static function isClass($path)
     {
-        TranslateException::notice("test", $path);
-        $files = new Files();
-        $files->open($path);
-        while (!$files->getLine()) {
-            echo $files->getFirstLine()."\n";
+        $file = fopen($path, "r");
+        $string = fread($file, filesize($path));
+        if (Regex::isClass($string) === 1) {
+            fclose($file);
+            return true;
         }
+        fclose($file);
+        return false;
     }
 }
